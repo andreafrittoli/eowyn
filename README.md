@@ -1,4 +1,4 @@
-# eowyn
+# Eowyn
 
 Eowyn is a simple implementation of a publish / subscribe server over HTTP.
 
@@ -13,3 +13,31 @@ Once a message has been published:
 
 Eowyn is python based. It does not belong to the OpenStack ecosystem, however
 it adopts coding style and testing tools from it.
+
+
+## Install Eowyn  
+
+Clone the repo:  
+
+    git clone https://github.com/andreafrittoli/eowyn  
+
+Install via pip:  
+
+    cd eowyn 
+    pip install .
+
+
+   ## Test Eowyn 
+
+Tests can be executed via tox.
+ Syntax checks:
+
+      tox -e pep8 
+
+ Unit tests:
+
+      tox -e py27 
+
+ ## Run Eowyn  
+
+TBD 
