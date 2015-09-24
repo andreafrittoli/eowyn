@@ -1,8 +1,7 @@
 # TODO (in rough order)
 
-- Add api test
 - Document architecture, design decisions and how to deploy and run (in progress)
-- Refine deployment (add run script, entry point)
+- Refine deployment - how to run with uwsgi
 - Setup sphinx
 - Implement an MQ backed model
 
