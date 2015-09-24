@@ -51,5 +51,6 @@ class TopicNotFoundException(EowynException):
 class NoMessageFoundException(EowynException):
     message = 'No message found for username %(username) on topic %(topic)'
 
+
 class InvalidDataException(EowynException):
     message = 'Invalid value %(value) for %(key)'

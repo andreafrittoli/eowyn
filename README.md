@@ -26,18 +26,19 @@ Install via pip:  
     cd eowyn 
     pip install .
 
-
-   ## Test Eowyn 
+## Test Eowyn
 
 Tests can be executed via tox.
- Syntax checks:
+Syntax checks:
 
-      tox -e pep8 
+    tox -e pep8
+    
+Unit and functional tests:
 
- Unit tests:
+    tox -e py27
 
-      tox -e py27 
+## Run Eowyn
 
- ## Run Eowyn  
+Start Eowyn by running the flak app:
 
-TBD 
+    python eowin/api.py
