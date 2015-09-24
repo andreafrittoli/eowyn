@@ -14,8 +14,8 @@ If there are subscriptions for a topic, the message exists as long either
 all subscribers have received it, or all related subscription have been 
 cancelled.
 
-The implementation provided here is an in-memory manager, where all objects 
-are simply stored in memory. The in-memory manager does not support
+The basic implementation provided here is an in-memory manager, where all 
+objects are simply stored in memory. The in-memory manager does not support
 horizontal scalability, and does not persist subscription across restarts.
 This implementation is useful for development and for testing purposed, but 
 it's not meant for production use.
@@ -24,8 +24,7 @@ Different implementation shall provide persistence of subscriptions across
 across restarts - which is not explicit requirement, but which seems a 
 reasonable requirement. 
 
-Horizontal capability can be achieved by running multiple instances of Eowyn
-under a (stateless) load balancer. Multiple instance will then require 
-concurrent access to subscriptions and messages. A DB or MQ backed 
-implementation of the manager could support this kind of deployment 
-architecture.
+Horizontal scalability can be achieved by running Eowyn in conjunction with
+uwsgi. Multiple instance will then require concurrent access to subscriptions
+and messages. A DB or MQ backed implementation of the manager could support
+this kind of deployment architecture.
