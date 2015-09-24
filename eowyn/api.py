@@ -18,7 +18,7 @@ import flask_restful
 import functools
 
 import eowyn.exceptions as eowyn_exc
-from model import manager
+from eowyn.model import manager
 
 app = flask.Flask(__name__)
 api = flask_restful.Api(app)
@@ -26,18 +26,16 @@ api = flask_restful.Api(app)
 manager = manager.get_manager()
 
 
-def handle_validate():
+def handle_validate(f):
     """A decorator to apply handle data validation errors"""
-    def decorator(f):
 
-        @functools.wraps(f)
-        def wrapper(self, *func_args, **func_kwargs):
-            try:
-                return f(self, *func_args, **func_kwargs)
-            except eowyn_exc.InvalidDataException as ida:
-                flask_restful.abort(400, str(ida))
-        return wrapper
-    return decorator
+    @functools.wraps(f)
+    def wrapper(self, *func_args, **func_kwargs):
+        try:
+            return f(self, *func_args, **func_kwargs)
+        except eowyn_exc.InvalidDataException as ida:
+            flask_restful.abort(400, message=str(ida))
+    return wrapper
 
 
 class Subscription(flask_restful.Resource):
@@ -52,13 +50,13 @@ class Subscription(flask_restful.Resource):
             # If no message is found simply return 204
             return '', 204
         except eowyn_exc.SubscriptionNotFoundException as snfe:
-            flask_restful.abort(404, str(snfe))
+            flask_restful.abort(404, message=str(snfe))
 
     @handle_validate
     def post(self, topic, username):
         # Subscribe to a topic
         try:
-            manager.create_subscriptions(topic=topic, username=username)
+            manager.create_subscription(topic=topic, username=username)
             return '', 200
         except eowyn_exc.SubscriptionAlreadyExistsException:
             # NOTE(andreaf) This is not specified, but it seemed a
@@ -69,10 +67,10 @@ class Subscription(flask_restful.Resource):
     def delete(self, topic, username):
         # Unsubscribe from a topic
         try:
-            manager.delete_subscriptions(topic=topic, username=username)
+            manager.delete_subscription(topic=topic, username=username)
             return '', 200
         except eowyn_exc.SubscriptionNotFoundException as snfe:
-            flask_restful.abort(404, str(snfe))
+            flask_restful.abort(404, message=str(snfe))
 
 
 class Message(flask_restful.Resource):
@@ -83,9 +81,10 @@ class Message(flask_restful.Resource):
         # There's no content type set for messages, they're plain text.
         # Because of that we need to extract the text from the
         # ImmutableMultiDIct returned by flask
-        message = request.form.keys()[0]
+        # message = request.form.keys()[0]
+        message = request.data
         try:
-            manager.publish_messages(topic, message)
+            manager.publish_message(topic, message)
         except eowyn_exc.TopicNotFoundException:
             # NOTE(andreaf) When no topic is not found it means no subscription
             # exists so the message is discarded right away. We still need to
@@ -102,4 +101,4 @@ api.add_resource(Subscription, '/<string:topic>/<string:username>')
 api.add_resource(Message, '/<string:topic>')
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)

@@ -42,3 +42,23 @@ Unit and functional tests:
 Start Eowyn by running the flak app:
 
     python eowin/api.py
+
+## Using Eowyin
+
+This is an example of how to interact with Eowyin via curl requests.
+
+Create a subscription for `eowyn` to the `cats` topic:
+
+    curl http://localhost:5000/cats/eowyn -X POST -v
+    
+Post a message to the `cats` topic:
+
+    curl http://localhost:5000/cats -X POST -d 'http://cuteoverload.files.wordpress.com/2014/10/unnamed23.jpg?w=750&h=1000' -v -H 'content-type: plain/text'
+    
+Retrieve a message from the `cats` topic:
+
+    curl http://localhost:5000/cats/eowyin -X GET -v
+
+Delete a subscription for `eowyn` from the `cats` topic:
+
+    curl http://localhost:5000/cats/andrea -X DELETE -v
