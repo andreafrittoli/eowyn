@@ -20,7 +20,7 @@ class EowynException(Exception):
     def __init__(self, *args, **kwargs):
         super(EowynException, self).__init__()
         try:
-            self._error_string = self.message % kwargs
+            self._error_string = self.message.format(**kwargs)
         except Exception:
             # at least get the core message out if something happened
             self._error_string = self.message
@@ -31,26 +31,29 @@ class EowynException(Exception):
             self._error_string = (self._error_string +
                                   "\nDetails: %s" % '\n'.join(args))
 
+    def __str__(self):
+        return self._error_string
+
 
 class InvalidManagerException(EowynException):
-    message = 'Invalid manager %(manager)'
+    message = 'Invalid manager {manager}'
 
 
 class SubscriptionAlreadyExistsException(EowynException):
-    message = 'Subscription for %(username) already exists on %(topic)'
+    message = 'Subscription for {username} already exists on {topic}'
 
 
 class SubscriptionNotFoundException(EowynException):
-    message = 'Subscription for %(username) does not exists on %(topic)'
+    message = 'Subscription for {username} does not exists on {topic}'
 
 
 class TopicNotFoundException(EowynException):
-    message = 'No subscription found for topic %(topic)'
+    message = 'No subscription found for topic {topic}'
 
 
 class NoMessageFoundException(EowynException):
-    message = 'No message found for username %(username) on topic %(topic)'
+    message = 'No message found for username {username} on topic {topic}'
 
 
 class InvalidDataException(EowynException):
-    message = 'Invalid value %(value) for %(key)'
+    message = 'Invalid value {value} for {key}'
