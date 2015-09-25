@@ -41,7 +41,6 @@ class Manager(object):
         """
         self.validate_topic(topic)
         self.validate_username(username)
-        pass
 
     @abc.abstractmethod
     def delete_subscription(self, topic, username):
@@ -55,7 +54,6 @@ class Manager(object):
         """
         self.validate_topic(topic)
         self.validate_username(username)
-        pass
 
     @abc.abstractmethod
     def publish_message(self, topic, message):
@@ -69,7 +67,6 @@ class Manager(object):
         """
         self.validate_topic(topic)
         self.validate_message(message)
-        pass
 
     @abc.abstractmethod
     def pop_message(self, topic, username):
@@ -84,7 +81,6 @@ class Manager(object):
         """
         self.validate_topic(topic)
         self.validate_username(username)
-        pass
 
     def validate_topic(self, topic):
         if topic is None:
@@ -153,7 +149,7 @@ class SimpleManager(Manager):
             raise eowyn_exc.SubscriptionNotFoundException(
                 topic=topic, username=username)
 
-classes = ['SimpleManager']
+classes = ['SimpleManager', 'RedisManager']
 
 
 def get_manager(name='SimpleManager'):

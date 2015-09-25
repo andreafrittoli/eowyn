@@ -16,6 +16,7 @@ from eowyn import api
 from eowyn.model import manager
 from eowyn.tests import base
 
+
 def cleanup_message(message):
     return message.rstrip('\n"').lstrip('"')
 
@@ -33,8 +34,8 @@ class TestRestAPI(base.TestCase):
         self.app.post('/topic', data='message',
                       headers={"content-type": "text/plain"})
         response = self.app.get('/topic/username')
-        self.assertEquals(200, response.status_code)
-        self.assertEquals('message', cleanup_message(response.data))
+        self.assertEqual(200, response.status_code)
+        self.assertEqual('message', cleanup_message(response.data))
 
     def test_subscription_get_many_messages(self):
         messages = ['first_message', 'second_message']
@@ -44,35 +45,35 @@ class TestRestAPI(base.TestCase):
                           headers={"content-type": "text/plain"})
         for expected in messages:
             response = self.app.get('/topic/username')
-            self.assertEquals(200, response.status_code)
-            self.assertEquals(expected, cleanup_message(response.data))
+            self.assertEqual(200, response.status_code)
+            self.assertEqual(expected, cleanup_message(response.data))
 
     def test_subscription_get_no_message(self):
         self.app.post('/topic/username')
         response = self.app.get('/topic/username')
-        self.assertEquals(204, response.status_code)
-        self.assertEquals(0, len(cleanup_message(response.data)))
+        self.assertEqual(204, response.status_code)
+        self.assertEqual(0, len(cleanup_message(response.data)))
 
     def test_subscription_get_no_subscription(self):
         response = self.app.get('/topic/username')
-        self.assertEquals(404, response.status_code)
+        self.assertEqual(404, response.status_code)
 
     def test_subscription_post(self):
         response = self.app.post('/topic/username')
         self.assertEqual(200, response.status_code)
-        self.assertEquals(0, len(cleanup_message(response.data)))
+        self.assertEqual(0, len(cleanup_message(response.data)))
 
     def test_subscription_post_duplicate(self):
         self.app.post('/topic/username')
         response = self.app.post('/topic/username')
         self.assertEqual(201, response.status_code)
-        self.assertEquals(0, len(cleanup_message(response.data)))
+        self.assertEqual(0, len(cleanup_message(response.data)))
 
     def test_subscription_delete(self):
         self.app.post('/topic/username')
         response = self.app.delete('/topic/username')
         self.assertEqual(200, response.status_code)
-        self.assertEquals(0, len(cleanup_message(response.data)))
+        self.assertEqual(0, len(cleanup_message(response.data)))
 
     def test_subscription_delete_no_subscription(self):
         response = self.app.delete('/topic/username')
@@ -105,7 +106,7 @@ class TestRestAPI(base.TestCase):
         for j in xrange(3):
             response = self.app.get('/topic/username')
             expected = message % str(j)
-            self.assertEquals(expected, cleanup_message(response.data))
+            self.assertEqual(expected, cleanup_message(response.data))
 
     def test_message_post_no_subscription(self):
         response = self.app.post('/topic', data='message',
