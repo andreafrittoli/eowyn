@@ -1,9 +1,9 @@
 # Eowyn Model Manager
 
 The model manager provides a layer of abstraction between the resources in the
-REST API and how they are managed, allowing for different implementations.
+REST API and how they are stored, allowing for different implementations.
 
-The model introduces managers for subscriptions and messages.
+Managers handle storage of subscriptions and messages.
 
 Subscriptions are identified by a topic and a username. Topics are ephemeral,
 they exist only as long as a subscription for them.
