@@ -80,4 +80,3 @@ class TestExceptions(base.TestCase):
     def test_invalid_data_exception_invalid_param(self):
         exc = eowyn_exc.InvalidDataException(foo='bar1')
         self.assertNotIn('bar1', str(exc))
-

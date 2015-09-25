@@ -36,12 +36,30 @@ Syntax checks:
 Unit and functional tests:
 
     tox -e py27
+    
+## Configuring Eowyn
+
+A configuration file may be used to configure Eowyn. 
+A sample one is provided as part of Eowyn, under etc/api.sample.conf.
+
+The default configuration uses a redis DB as backend. 
+Make sure redis is running locally, or that host and port of the redis
+DB are known.
+
+Alternatively it is possible to run Eowyn with the `simple` manager.
+The `simple` manager uses a python data structure to store subscriptions
+and messages, and it's neither resilient to service restart nor
+horizontally scalable, and it's only recommended for development / testing.
 
 ## Run Eowyn
 
 Start Eowyn by running the flak app:
 
-    python eowin/api.py
+    eowyn-api [config-file]
+    
+If Eowyn is not installed, run the flask app from source:
+
+    python eowyn/api.py [config-file]
 
 ## Using Eowyin
 
@@ -62,3 +80,16 @@ Retrieve a message from the `cats` topic:
 Delete a subscription for `eowyn` from the `cats` topic:
 
     curl http://localhost:5000/cats/andrea -X DELETE -v
+
+## Deploying Eowyn
+
+The recommended deployment stack for Eowyn is:
+
+    Load balancer -> Nginx -> uwsgi -> Eowyn -> Redis (cluster) 
+
+Eowyn can scale horizontally on a single server (e.g. via uwsgi) as well as
+across multiple servers (e.g. via a load balanced Nginx).
+
+The Redis backend ensures exclusive access to the keys in the store.
+
+This configuration has not been tested E2E, because of lack of time.
