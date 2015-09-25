@@ -1,4 +1,4 @@
-# TODO (in rough order)
+# Design and Future Developments
 
 Eowyn is designed as a horizontally scalable HTTP-based subscribe/publish
 service implementation.
@@ -13,11 +13,11 @@ To ensure that the code is production quality:
 - the server is stateless and can scale horizontally, which ensures fault
   tolerance, and possibility to scale-out dynamically when under high load
   
-Eowyn is easy install and configure. In can be installed in a pyhon
+Eowyn is easy install and configure. In can be installed in a python
 virtual environment, and it's completely stateless, making it easy to update
 on a running system. Redis does not use a fixed schema, so there is no
 requirement for schema updates either. However a strategy must be designed to
-support rolling upgrade and support of multiple versions of the data structures
+support rolling upgrade and thus multiple versions of the data structures
 co-existing in the same Redis DB.
 
 There's more that could be done to ensure the quality of the software:
