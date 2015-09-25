@@ -138,13 +138,13 @@ class SimpleManager(Manager):
 
     def pop_message(self, topic, username):
         super(SimpleManager, self).pop_message(topic, username)
-        if topic in self.subscriptions.keys():
-            if username in self.subscriptions[topic].keys():
-                try:
-                    return self.subscriptions[topic][username].pop()
-                except exceptions.IndexError:
-                    raise eowyn_exc.NoMessageFoundException(
-                        topic=topic, username=username)
+        if (topic in self.subscriptions.keys() and username in
+                self.subscriptions[topic].keys()):
+            try:
+                return self.subscriptions[topic][username].pop()
+            except exceptions.IndexError:
+                raise eowyn_exc.NoMessageFoundException(
+                    topic=topic, username=username)
         else:
             raise eowyn_exc.SubscriptionNotFoundException(
                 topic=topic, username=username)

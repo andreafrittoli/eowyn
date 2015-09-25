@@ -71,14 +71,13 @@ class RedisManager(manager.Manager):
 
     def pop_message(self, topic, username):
         super(RedisManager, self).pop_message(topic, username)
-        if topic in self.store:
-            if username in self.store.smembers(topic):
-                message = self.store.rpop(self._queue(topic, username))
-                if not message:
-                    raise eowyn_exc.NoMessageFoundException(
-                        topic=topic, username=username)
-                else:
-                    return message
+        if topic in self.store and username in self.store.smembers(topic):
+            message = self.store.rpop(self._queue(topic, username))
+            if not message:
+                raise eowyn_exc.NoMessageFoundException(
+                    topic=topic, username=username)
+            else:
+                return message
         else:
             raise eowyn_exc.SubscriptionNotFoundException(
                 topic=topic, username=username)

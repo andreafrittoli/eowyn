@@ -81,3 +81,10 @@ class TestRedisManager(test_simple_manager.TestSimpleManager):
                          self.get_queue('topic', 'username').count('message'))
         self.assertEqual('message',
                          self.data.rpop(self.mgr._queue('topic', 'username')))
+
+    def test_pop_message(self):
+        self.mgr.create_subscription('topic', 'username')
+        self.mgr.publish_message('topic', 'message')
+        message = self.mgr.pop_message('topic', 'username')
+        self.assertNotIn('message', self.get_queue('topic', 'username'))
+        self.assertEqual('message', message)

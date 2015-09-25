@@ -57,7 +57,7 @@ Post a message to the `cats` topic:
     
 Retrieve a message from the `cats` topic:
 
-    curl http://localhost:5000/cats/eowyin -X GET -v
+    curl http://localhost:5000/cats/eowyn -X GET -v
 
 Delete a subscription for `eowyn` from the `cats` topic:
 

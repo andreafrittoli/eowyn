@@ -99,3 +99,34 @@ class TestSimpleManager(base.TestCase):
             with testtools.ExpectedException(
                     eowyn_exc.InvalidDataException):
                 self.mgr.publish_message(*args)
+
+    def test_pop_message(self):
+        self.mgr.create_subscription('topic', 'username')
+        self.mgr.publish_message('topic', 'message')
+        message = self.mgr.pop_message('topic', 'username')
+        self.assertNotIn('message', self.data['topic']['username'])
+        self.assertEqual('message', message)
+
+    def test_pop_message_no_message(self):
+        self.mgr.create_subscription('topic', 'username')
+        with testtools.ExpectedException(eowyn_exc.NoMessageFoundException):
+            self.mgr.pop_message('topic', 'username')
+
+    def test_pop_message_no_subscription(self):
+        self.mgr.create_subscription('topic', 'someone_else')
+        with testtools.ExpectedException(
+                eowyn_exc.SubscriptionNotFoundException):
+            self.mgr.pop_message('topic', 'username')
+
+    def test_pop_message_no_topic(self):
+        with testtools.ExpectedException(
+                eowyn_exc.SubscriptionNotFoundException):
+            self.mgr.pop_message('topic', 'username')
+
+    def test_pop_message_invalid_data(self):
+        for args in [(None, 'username'),
+                     ('topic', None),
+                     (None, None)]:
+            with testtools.ExpectedException(
+                    eowyn_exc.InvalidDataException):
+                self.mgr.pop_message(*args)

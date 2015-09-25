@@ -56,7 +56,12 @@ class TestRestAPI(base.TestCase):
         self.assertEqual(204, response.status_code)
         self.assertEqual(0, len(cleanup_message(response.data)))
 
+    def test_subscription_get_no_topic(self):
+        response = self.app.get('/topic/username')
+        self.assertEqual(404, response.status_code)
+
     def test_subscription_get_no_subscription(self):
+        self.app.post('/topic/someone_else')
         response = self.app.get('/topic/username')
         self.assertEqual(404, response.status_code)
 
