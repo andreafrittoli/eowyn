@@ -14,17 +14,20 @@ If there are subscriptions for a topic, the message exists as long either
 all subscribers have received it, or all related subscription have been 
 cancelled.
 
-The basic implementation provided here is an in-memory manager, where all 
-objects are simply stored in memory. The in-memory manager does not support
-horizontal scalability, and does not persist subscription across restarts.
+Two implementations are provided here. 
+Eowyn can be configured to use either implementation. 
+
+The first one `SimpleManager` is an in-memory manager, where all objects are
+stored in the memory space of the process running Eowyn. 
+The in-memory manager does not support horizontal scalability, and does not
+persist subscription across restarts.
 This implementation is useful for development and for testing purposed, but 
 it's not meant for production use.
 
-Different implementation shall provide persistence of subscriptions across 
-across restarts - which is not explicit requirement, but which seems a 
-reasonable requirement. 
+The second one `RedisManager` stores objects in a Redis backend, and it
+provides persistance of subscriptions and messages across restarts. This
+is the manager enabled by default in Eowyn.
 
-Horizontal scalability can be achieved by running Eowyn in conjunction with
-uwsgi. Multiple instance will then require concurrent access to subscriptions
-and messages. A DB or MQ backed implementation of the manager could support
-this kind of deployment architecture.
+More implementations could be provided in-tree in future. There is no
+plugin mechanism in place, but it could be easily added to allow for
+3rd parties to maintain their backend plugin for Eowyn.
