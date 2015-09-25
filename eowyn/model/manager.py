@@ -148,14 +148,3 @@ class SimpleManager(Manager):
         else:
             raise eowyn_exc.SubscriptionNotFoundException(
                 topic=topic, username=username)
-
-classes = ['SimpleManager', 'RedisManager']
-
-
-def get_manager(name='SimpleManager'):
-    if name in classes:
-        klass = globals().get(name, None)
-        if klass is not None:
-            return klass()
-    else:
-        raise eowyn_exc.InvalidManager(manager=name)

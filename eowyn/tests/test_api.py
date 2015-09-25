@@ -13,7 +13,7 @@
 # under the License.
 
 from eowyn import api
-from eowyn.model import manager
+from eowyn.model import managers
 from eowyn.tests import base
 
 
@@ -26,7 +26,9 @@ class TestRestAPI(base.TestCase):
     def setUp(self):
         super(TestRestAPI, self).setUp()
         api.app.config['TESTING'] = True
-        api.manager = manager.get_manager()
+        # Use the simple manager for API testing, so we may run
+        # API tests even without a Redis DB available
+        api.manager = managers.get_manager(name='simple')
         self.app = api.app.test_client()
 
     def test_subscription_get(self):

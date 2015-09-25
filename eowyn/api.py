@@ -12,18 +12,21 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
+
+import ConfigParser
 import flask
 from flask import request
 import flask_restful
 import functools
+import sys
 
 import eowyn.exceptions as eowyn_exc
-from eowyn.model import manager
+from eowyn.model import managers
 
 app = flask.Flask(__name__)
 api = flask_restful.Api(app)
 
-manager = manager.get_manager()
+manager = None
 
 
 def handle_validate(f):
@@ -100,5 +103,28 @@ api.add_resource(Subscription, '/<string:topic>/<string:username>')
 # Handle Publisher API (post message)
 api.add_resource(Message, '/<string:topic>')
 
+
+def main():
+    config = ConfigParser.ConfigParser()
+    try:
+        # Read config file as first command line parameter
+        config_file = sys.argv[1]
+        config.read(config_file)
+        # Use the configured manager
+        manager_type = config.get('default', 'manager')
+        manager_configs = config.items(manager_type)
+        # In case of duplicated configs, the last one wins
+        manager_configs = {k: v for (k, v) in manager_configs}
+        # Other configs
+        debug = config.get('default', 'debug')
+    except IndexError:
+        # Or else use defaults
+        debug = False
+        manager_type = 'redis'
+        manager_configs = {'host': 'localhost', 'port': 6379}
+    global manager
+    manager = managers.get_manager(manager_type, **manager_configs)
+    app.run(debug=debug)
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    main()

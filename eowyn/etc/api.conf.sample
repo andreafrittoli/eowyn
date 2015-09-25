@@ -1,0 +1,7 @@
+[default]
+manager = redis
+debug = false
+
+[redis]
+host = localhost
+port = 6379
